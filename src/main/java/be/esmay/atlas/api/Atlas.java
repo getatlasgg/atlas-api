@@ -1,9 +1,11 @@
 package be.esmay.atlas.api;
 
 import be.esmay.atlas.api.event.Events;
+import be.esmay.atlas.api.lock.Locks;
 import be.esmay.atlas.api.server.LocalServer;
 import be.esmay.atlas.api.server.ServerDirectory;
 import be.esmay.atlas.api.server.Setup;
+import be.esmay.atlas.api.transfer.Transfers;
 import java.util.Optional;
 
 /**
@@ -40,4 +42,19 @@ public interface Atlas {
      * @return the setup, or empty on every other server
      */
     Optional<Setup> setup();
+
+    /**
+     * Network-wide leases with fencing tokens.
+     *
+     * @return the leases of this server
+     */
+    Locks locks();
+
+    /**
+     * Player transfers between servers, built on the leases of
+     * {@link #locks()}.
+     *
+     * @return the transfers of this server
+     */
+    Transfers transfers();
 }
