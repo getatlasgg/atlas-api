@@ -1,9 +1,12 @@
 package be.esmay.atlas.api.transfer;
 
+import java.time.Instant;
+import java.util.Objects;
+
 /**
  * What the store holds after a claim.
  */
-public sealed interface ClaimResult permits ClaimResult.Claimed, ClaimResult.Superseded {
+public sealed interface ClaimResult permits ClaimResult.Claimed, ClaimResult.Superseded, ClaimResult.Held {
 
     /**
      * The store now holds {@code token} for the player.
@@ -41,6 +44,27 @@ public sealed interface ClaimResult permits ClaimResult.Claimed, ClaimResult.Sup
             if (storeFence < 1) {
                 throw new IllegalArgumentException("a fence is at least 1");
             }
+        }
+    }
+
+    /**
+     * Another server still holds the player in the store, so an offline claim
+     * changed nothing. Atlas tries again until that server lets go or the
+     * panel grants the player.
+     *
+     * @param heldBy the id of the server that holds the player
+     * @param heldSince when that server took the player
+     */
+    record Held(String heldBy, Instant heldSince) implements ClaimResult {
+
+        /**
+         * Checks that every part is present.
+         *
+         * @throws NullPointerException when the holder or the time is missing
+         */
+        public Held {
+            Objects.requireNonNull(heldBy, "heldBy");
+            Objects.requireNonNull(heldSince, "heldSince");
         }
     }
 }

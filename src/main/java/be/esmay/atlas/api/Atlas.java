@@ -1,5 +1,6 @@
 package be.esmay.atlas.api;
 
+import be.esmay.atlas.api.compass.Compass;
 import be.esmay.atlas.api.event.Events;
 import be.esmay.atlas.api.lock.Locks;
 import be.esmay.atlas.api.server.LocalServer;
@@ -57,4 +58,12 @@ public interface Atlas {
      * @return the transfers of this server
      */
     Transfers transfers();
+
+    /**
+     * Where players go when they join, leave a server, or are sent into a
+     * group.
+     *
+     * @return the compass of this server
+     */
+    Compass compass();
 }

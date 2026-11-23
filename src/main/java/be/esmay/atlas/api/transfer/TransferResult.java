@@ -73,6 +73,8 @@ public sealed interface TransferResult permits TransferResult.Moved, TransferRes
         /** The panel could not be reached. */
         PANEL_UNREACHABLE,
         /** This server did not save the player in time. */
-        TIMED_OUT
+        TIMED_OUT,
+        /** This server runs in local mode, outside any network. */
+        LOCAL_MODE
     }
 }

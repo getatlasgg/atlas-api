@@ -5,8 +5,8 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * What a server does with a player's data. Atlas calls {@link #freeze} and
- * {@link #unfreeze} on the server's main thread, and {@link #save} and
- * {@link #claim} off it.
+ * {@link #unfreeze} on the server's main thread, and {@link #save},
+ * {@link #release} and {@link #claim} off it.
  */
 public interface PlayerHandler {
 
@@ -44,4 +44,18 @@ public interface PlayerHandler {
      * @return completes with the token the store holds afterwards
      */
     CompletableFuture<ClaimResult> claim(UUID player, Claim claim);
+
+    /**
+     * Clears this server as the player's holder in the store, so that another
+     * server can claim them while the panel cannot be reached. Atlas calls it
+     * after the quit save and waits for it before it releases the lease. A
+     * store without a holder keeps the default, which changes nothing.
+     *
+     * @param player the player
+     * @param token the fencing token the quit save was written under
+     * @return completes once the store no longer names this server
+     */
+    default CompletableFuture<Void> release(UUID player, long token) {
+        return CompletableFuture.completedFuture(null);
+    }
 }

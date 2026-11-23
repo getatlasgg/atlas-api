@@ -51,9 +51,21 @@ public interface Transfers {
     /**
      * Tells Atlas that a write under this server's token changed nothing,
      * because the store already holds a newer token. Atlas freezes the player
-     * and works out who owns them.
+     * and kicks them from this server.
      *
      * @param player the player whose write was refused
      */
     void refused(UUID player);
+
+    /**
+     * Whether this server owns the player right now. A quit handler that
+     * changes the world or a store, such as dropping items or spawning a
+     * combat-log stand-in, runs only while this is true: once a lease is lost,
+     * a save is refused or a transfer commits, another server has the
+     * player's state.
+     *
+     * @param player the player
+     * @return true while this server holds a valid lease on the player
+     */
+    boolean owns(UUID player);
 }

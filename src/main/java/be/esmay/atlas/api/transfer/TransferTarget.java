@@ -1,5 +1,6 @@
 package be.esmay.atlas.api.transfer;
 
+import be.esmay.atlas.api.server.AtlasServer;
 import java.util.Objects;
 
 /**
@@ -8,9 +9,11 @@ import java.util.Objects;
 public sealed interface TransferTarget permits TransferTarget.Server, TransferTarget.Group {
 
     /**
-     * One server.
+     * One server, by its id or its name. An id wins when a name matches
+     * another server's id.
      *
-     * @param serverId the server's id, as {@code AtlasServer.id()} gives it
+     * @param serverId the server's id, as {@code AtlasServer.id()} gives it,
+     *                 or its name, such as {@code lobby-4}
      */
     record Server(String serverId) implements TransferTarget {
 
@@ -22,10 +25,21 @@ public sealed interface TransferTarget permits TransferTarget.Server, TransferTa
         public Server {
             Objects.requireNonNull(serverId, "serverId");
         }
+
+        /**
+         * Names the server from the directory.
+         *
+         * @param server the server, as {@code servers()} lists it
+         * @throws NullPointerException when the server is missing
+         */
+        public Server(AtlasServer server) {
+            this(Objects.requireNonNull(server, "server").id());
+        }
     }
 
     /**
-     * The server of a group with the fewest players and room for one more.
+     * A server of the group, picked with the group's rule by the proxy that
+     * holds the player.
      *
      * @param name the group's name
      */
