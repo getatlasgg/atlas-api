@@ -29,6 +29,13 @@ public interface ServerMetadata {
     String DEV = "atlas.dev";
 
     /**
+     * The key Atlas sets to {@code true} on a server that is moving its
+     * players to a replacement before it stops. Proxies list it but never
+     * pick it for a joining player.
+     */
+    String DRAINING = "atlas.draining";
+
+    /**
      * Sets a value.
      *
      * @param key one to 64 lowercase letters, digits, dots, dashes or underscores, starting with a letter or digit
