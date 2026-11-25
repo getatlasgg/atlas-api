@@ -6,12 +6,16 @@ import java.util.concurrent.CompletableFuture;
 /**
  * What a server does with a player's data. Atlas calls {@link #freeze} and
  * {@link #unfreeze} on the server's main thread, and {@link #save},
- * {@link #release} and {@link #claim} off it.
+ * {@link #release} and {@link #claim} off it. Before a transfer, when a
+ * player quits and when the server stops, {@link #save} starts only after
+ * {@link #freeze} has returned.
  */
 public interface PlayerHandler {
 
     /**
-     * Stops the player from changing anything this server would save.
+     * Stops the player from changing anything this server would save. This is
+     * the place to copy what {@link #save} writes, since it runs on the main
+     * thread and the next save follows it.
      *
      * @param player the player
      */
