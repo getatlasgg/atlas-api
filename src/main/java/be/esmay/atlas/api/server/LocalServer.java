@@ -3,6 +3,7 @@ package be.esmay.atlas.api.server;
 import be.esmay.atlas.api.drain.DrainListener;
 import be.esmay.atlas.api.drain.Draining;
 import be.esmay.atlas.api.drain.PlayerHold;
+import be.esmay.atlas.api.drain.ProxyMoveListener;
 import be.esmay.atlas.api.event.Subscription;
 import java.util.Optional;
 
@@ -57,6 +58,24 @@ public interface LocalServer {
      * @return the hold, which lets the players go when released
      */
     PlayerHold holdPlayers();
+
+    /**
+     * Listens for players of this server moving to another proxy while a
+     * rollout replaces the proxy they came through.
+     *
+     * @param listener hears each move, each player that comes back, and the end
+     * @return the subscription, which ends when it is closed
+     */
+    Subscription onProxyMoves(ProxyMoveListener listener);
+
+    /**
+     * Keeps the players of this server on their proxy while a rollout replaces
+     * it, such as until the current round ends. The proxy moves them once
+     * every hold is released, or at the move's deadline.
+     *
+     * @return the hold, which lets the players go when released
+     */
+    PlayerHold holdProxyMoves();
 
     /**
      * Where this server is in its game loop, read from its metadata.

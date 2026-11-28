@@ -3,6 +3,8 @@ package be.esmay.atlas.api;
 import be.esmay.atlas.api.compass.Compass;
 import be.esmay.atlas.api.event.Events;
 import be.esmay.atlas.api.lock.Locks;
+import be.esmay.atlas.api.scaling.ScaledGroup;
+import be.esmay.atlas.api.scaling.Signals;
 import be.esmay.atlas.api.server.LocalServer;
 import be.esmay.atlas.api.server.ServerDirectory;
 import be.esmay.atlas.api.server.Setup;
@@ -66,4 +68,21 @@ public interface Atlas {
      * @return the compass of this server
      */
     Compass compass();
+
+    /**
+     * A Scaled group whose servers this server's code decides.
+     *
+     * @param name the group's name, matched without case or spacing
+     * @return the group, checked by the panel on each ask
+     * @throws IllegalArgumentException when the name is blank or longer
+     *     than 100 characters
+     */
+    ScaledGroup group(String name);
+
+    /**
+     * The network's signals, which scaling rules read.
+     *
+     * @return the signals of this network
+     */
+    Signals signals();
 }
